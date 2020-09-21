@@ -1,9 +1,12 @@
 # thumbnailer
 [![pub package](https://img.shields.io/pub/v/signature.svg)](https://pub.dartlang.org/packages/thumbnailer)
 
-A Flutter plugin that is able to generate thumbnails for images, pdf and xlsx files 
-If thumbnail generation is not supported for specific mime type, then a fallback icon is returned
-Plugin supports registering custom mime type handlers for dynamic extendability
+A Flutter plugin that is able to generate thumbnails for images, pdf and xlsx files
+* if thumbnail generation is not supported for specific mime type, then a fallback icon from FontAwesome is returned
+* supports registering custom mime type handlers for dynamic extendability
+* resulting thumbnail (or fallback icon) is flutter widget
+* supports custom resizing/styling of the resulting thumbnail
+
 
 ## Why
 In time of creation of this plugin, there was no available solution on pub.dev
