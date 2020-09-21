@@ -1,0 +1,25 @@
+name: thumbnailer
+description: A Flutter plugin that is able to generate thumbnails from files with various mime types. If thumbnail generation is not support for specific mime type, then a fallback icon is returned
+version: 1.0.0
+author: 4Q s.r.o.
+homepage: https://github.com/4Q-s-r-o/thumbnailer
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.20.0 <2.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  font_awesome_flutter: 8.8.1
+  native_pdf_view: 3.8.0
+  native_pdf_renderer: 2.3.2
+  spreadsheet_decoder: 1.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
