@@ -373,7 +373,8 @@ class _MyAppState extends State<MyApp> {
                               },
                               mimeType: 'application/pdf',
                               widgetSize: 300,
-                              decoration: WidgetDecoration(wrapperBgColor: Colors.blueAccent),
+                              decoration: WidgetDecoration(
+                                  wrapperBgColor: Colors.blueAccent),
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),
@@ -390,14 +391,16 @@ class _MyAppState extends State<MyApp> {
                             Thumbnail(
                               dataResolver: () async {
                                 return (await DefaultAssetBundle.of(context)
-                                        .load('assets/samples/xlsx-sample.xlsx'))
+                                        .load(
+                                            'assets/samples/xlsx-sample.xlsx'))
                                     .buffer
                                     .asUint8List();
                               },
                               mimeType:
                                   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                               widgetSize: 300,
-                              decoration: WidgetDecoration(wrapperBgColor: Colors.blueAccent),
+                              decoration: WidgetDecoration(
+                                  wrapperBgColor: Colors.blueAccent),
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),
