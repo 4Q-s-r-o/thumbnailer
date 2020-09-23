@@ -1,6 +1,6 @@
 name: thumbnailer
 description: Plugin that is able to generate thumbnails from files with various mime types. If thumbnail generation is not support for specific mime type, then a fallback icon is returned
-version: 1.0.1
+version: 1.0.2
 homepage: https://github.com/4Q-s-r-o/thumbnailer
 #author: 4Q s.r.o.
 
