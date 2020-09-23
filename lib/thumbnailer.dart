@@ -102,7 +102,7 @@ class Thumbnailer {
   };
 
   ///Map which contains strategy of creating thumbnail widget
-  static final Map<String, GenerationStrategyFunction> generationStrategies =
+  static final Map<String, GenerationStrategyFunction> _generationStrategies =
       <String, GenerationStrategyFunction>{
     'image': (
       String name,
@@ -197,79 +197,45 @@ class Thumbnailer {
         for (int j = 0; j < rowsCount; j++) {
           if (i == 0) {
             if (j == 0) {
-              rowWidgets.add(
-                Container(
-                  decoration: BoxDecoration(
-                    color: const Color.fromRGBO(220, 220, 220, 0.9),
-                    border: Border(
-                      right: BorderSide(width: widgetSize / 300),
-                      bottom: BorderSide(width: widgetSize / 300),
-                      top: BorderSide(width: widgetSize / 300),
-                      left: BorderSide(width: widgetSize / 300),
-                    ),
-                  ),
-                  width: rowWidth,
-                  height: rowHeight,
-                  child: Center(
-                    child: Text(
-                      ' ',
-                      style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w900),
-                    ),
-                  ),
-                ),
-              );
+              //view selector
+              rowWidgets.add(_createCell(
+                  text: ' ',
+                  rowHeight: rowHeight,
+                  rowWidth: rowWidth,
+                  fontSize: fontSize,
+                  border: Border.fromBorderSide(
+                    BorderSide(width: widgetSize / 300),
+                  )));
             }
-            rowWidgets.add(
-              Container(
-                decoration: BoxDecoration(
-                  color: const Color.fromRGBO(220, 220, 220, 0.9),
-                  border: Border(
-                    right: BorderSide(width: widgetSize / 300),
-                    bottom: BorderSide(width: widgetSize / 300),
-                    top: BorderSide(width: widgetSize / 300),
-                  ),
-                ),
-                width: rowWidth,
-                height: rowHeight,
-                child: Center(
-                  child: LayoutBuilder(
-                    builder: (BuildContext context, BoxConstraints constraints) {
-                      return Text(
-                        '${rowsS.elementAt(i).elementAt(j) ?? ''}',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: (constraints.maxHeight / fontSize).floor(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w900),
-                      );
-                    },
-                  ),
-                ),
+            //column headers
+            rowWidgets.add(_createCell(
+              text: '${rowsS.elementAt(i).elementAt(j) ?? ''}',
+              rowHeight: rowHeight,
+              rowWidth: rowWidth,
+              fontSize: fontSize,
+              border: Border(
+                right: BorderSide(width: widgetSize / 300),
+                bottom: BorderSide(width: widgetSize / 300),
+                top: BorderSide(width: widgetSize / 300),
               ),
-            );
+            ));
           } else {
             if (j == 0) {
-              rowWidgets.add(
-                Container(
-                  decoration: BoxDecoration(
-                    color: const Color.fromRGBO(220, 220, 220, 0.9),
-                    border: Border(
-                      right: BorderSide(width: widgetSize / 300),
-                      bottom: BorderSide(width: widgetSize / 300),
-                      left: BorderSide(width: widgetSize / 300),
-                    ),
-                  ),
-                  width: rowWidth,
-                  height: rowHeight,
-                  child: Center(
-                    child: Text(
-                      '$i',
-                      style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w900),
-                    ),
-                  ),
+              //row headers
+              rowWidgets.add(_createCell(
+                text: '$i',
+                rowHeight: rowHeight,
+                rowWidth: rowWidth,
+                fontSize: fontSize,
+                border: Border(
+                  right: BorderSide(width: widgetSize / 300),
+                  bottom: BorderSide(width: widgetSize / 300),
+                  left: BorderSide(width: widgetSize / 300),
                 ),
-              );
+              ));
             }
             rowWidgets.add(
+              //cells
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -313,14 +279,39 @@ class Thumbnailer {
     return null;
   }
 
+  ///Internal helper function which creates decorated table cell
+  ///used for row headers, column headers and view selector in [_xlsxAndOdsCreationStrategy]
+  static Widget _createCell({
+    @required String text,
+    @required double rowHeight,
+    @required double rowWidth,
+    @required double fontSize,
+    @required Border border,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color.fromRGBO(220, 220, 220, 0.9),
+        border: border,
+      ),
+      width: rowWidth,
+      height: rowHeight,
+      child: Center(
+        child: Text(
+          text,
+          style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w900),
+        ),
+      ),
+    );
+  }
+
   ///Adds custom mappings to [_mimeTypeToIconDataMap]
   static void addCustomMimeTypesToIconDataMappings(Map<String, IconData> mappings) {
     _mimeTypeToIconDataMap.addAll(mappings);
   }
 
-  ///Adds custom strategies to [generationStrategies]
+  ///Adds custom strategies to [_generationStrategies]
   static void addCustomGenerationStrategies(Map<String, GenerationStrategyFunction> strategies) {
-    generationStrategies.addAll(strategies);
+    _generationStrategies.addAll(strategies);
   }
 
   ///Returns IconData for given mimeType
@@ -332,7 +323,7 @@ class Thumbnailer {
 /// Thumbnail widget
 ///
 /// dataResolver can be defined as dataResolver: () => null, but in this case custom creation
-/// strategies in [Thumbnailer.generationStrategies] has to be aware of null value
+/// strategies in [Thumbnailer._generationStrategies] has to be aware of null value
 class Thumbnail extends StatefulWidget {
   ///constructor
   const Thumbnail({
@@ -344,6 +335,8 @@ class Thumbnail extends StatefulWidget {
     this.name,
     this.decoration,
     this.onlyIcon,
+    this.useWaterMark,
+    this.useWrapper,
   }) : super(key: key);
 
   /// If non-null, the style to use for this thumbnail.
@@ -364,14 +357,20 @@ class Thumbnail extends StatefulWidget {
   /// Size of generated thumbnail without wrapper
   final double widgetSize;
 
-  /// Should be used icon instead of widget from [Thumbnailer.generationStrategies]
+  /// Should be used icon instead of widget from [Thumbnailer._generationStrategies]
   final bool onlyIcon;
+
+  /// Should create watermark and apply for thumbnail
+  final bool useWaterMark;
+
+  /// Should be thumbnail wrapped
+  final bool useWrapper;
 
   @override
   ThumbnailState createState() => ThumbnailState();
 }
 
-/// state for FileThumbnail widget
+/// state for Thumbnail widget
 class ThumbnailState extends State<Thumbnail> {
   Future<Widget> _thumbnailFuture;
 
@@ -379,7 +378,7 @@ class ThumbnailState extends State<Thumbnail> {
   void initState() {
     super.initState();
     final GenerationStrategyFunction generationStrategyFunction = _getIconByMimeType(
-      Thumbnailer.generationStrategies,
+      Thumbnailer._generationStrategies,
       widget.mimeType,
       '/',
     );
@@ -392,17 +391,38 @@ class ThumbnailState extends State<Thumbnail> {
         widget.widgetSize,
         widget.decoration,
       );
-    } else {
-      _thumbnailFuture = Future<Widget>.delayed(Duration.zero, () async => null);
     }
   }
 
-  // REVIEW: prepisat tak, aby najprv zistil ci existuje strategia. ak ano, vraciame FutureWidget, ak
-  // nie, vraciame ikonu. Ak generovanie zlyha, fallback je ikona. Generovanie ikony aj s wrapovanim
-  // teda musi ist do separe metody a bude volana na dvoch miestach
   @override
   Widget build(BuildContext context) {
-    Widget iconWidget;
+    if (_thumbnailFuture != null && !(widget.onlyIcon ?? false)) {
+      return FutureBuilder<Widget>(
+        future: _thumbnailFuture,
+        builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+          if (snapshot.hasError) {
+            throw snapshot.error;
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            return _wrapThumbnail(_applyMetadataWatermark(snapshot.data ?? _createIcon()));
+          } else {
+            return Container(
+              child: const Center(child: CircularProgressIndicator()),
+              width: widget.widgetSize,
+              height: widget.widgetSize,
+              decoration:
+                  BoxDecoration(color: widget.decoration?.backgroundColor ?? Colors.black45),
+            );
+          }
+        },
+      );
+    } else {
+      return _wrapThumbnail(_applyMetadataWatermark(_createIcon()));
+    }
+  }
+
+  ///Creates icon if [Thumbnailer._mimeTypeToIconDataMap] contains widget.mimeType if not throws error
+  Widget _createIcon() {
     final IconData iconData = _getIconByMimeType(
       Thumbnailer._mimeTypeToIconDataMap,
       widget.mimeType,
@@ -410,46 +430,17 @@ class ThumbnailState extends State<Thumbnail> {
     );
     if (iconData != null) {
       final WidgetDecoration wd = widget.decoration;
-      iconWidget = _applyMetadataWatermark(Icon(
+      return Icon(
         iconData,
         size: widget.widgetSize * 0.3,
         color: wd?.iconColor ?? Colors.black,
-      ));
-      if (widget.onlyIcon ?? false) {
-        if (iconWidget != null) {
-          return iconWidget = _wrapThumbnail(iconWidget);
-        } else {
-          throw FileThumbnailsException(
-            message: "Couldn't create thumbnail, unknown mime type: ${widget.mimeType}."
-                " Didn't you forget to register custom mimetype/icon mapping?",
-          );
-        }
-      }
+      );
+    } else {
+      throw FileThumbnailsException(
+        message: "Couldn't create thumbnail, unknown mime type: ${widget.mimeType}."
+            " Didn't you forget to register custom mimetype/icon mapping?",
+      );
     }
-    return FutureBuilder<Widget>(
-      future: _thumbnailFuture,
-      builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
-        if (snapshot.hasError) {
-          throw snapshot.error;
-        }
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data != null || iconWidget != null) {
-            return _wrapThumbnail(snapshot.data ?? iconWidget);
-          }
-          throw FileThumbnailsException(
-            message: "Couldn't create thumbnail, unknown mime type: ${widget.mimeType}."
-                " Didn't you forget to register custom generation strategy?",
-          );
-        } else {
-          return Container(
-            child: const Center(child: CircularProgressIndicator()),
-            width: widget.widgetSize,
-            height: widget.widgetSize,
-            decoration: BoxDecoration(color: widget.decoration?.backgroundColor ?? Colors.black45),
-          );
-        }
-      },
-    );
   }
 
   ///Internal helper function which extracts [T] value from [mapToExtractFrom].
@@ -469,67 +460,75 @@ class ThumbnailState extends State<Thumbnail> {
     return null;
   }
 
-  //REVIEW: inlajnovat do buducej metody generujucej ikonu
+  ///Wraps thumbnail if (widget.useWrapper ?? true)
   Widget _wrapThumbnail(Widget thumbnail) {
-    return Container(
-      width: widget.decoration?.wrapperSize ?? widget.widgetSize,
-      height: widget.decoration?.wrapperSize ?? widget.widgetSize,
-      decoration: BoxDecoration(color: widget.decoration?.wrapperBgColor ?? Colors.black26),
-      child: thumbnail,
-    );
+    if (widget.useWrapper ?? true) {
+      return Container(
+        width: widget.decoration?.wrapperSize ?? widget.widgetSize,
+        height: widget.decoration?.wrapperSize ?? widget.widgetSize,
+        decoration: BoxDecoration(color: widget.decoration?.wrapperBgColor ?? Colors.transparent),
+        child: thumbnail,
+      );
+    } else {
+      return thumbnail;
+    }
   }
 
-  // REVIEW: dat moznost ci aplikovat watermark (default true)
-  ///Applies watermark (file name and file size) on widget (used just for icons)
-  Widget _applyMetadataWatermark(Widget widget) {
-    return Center(
-      child: Stack(
-        children: <Widget>[
-          Container(
-            width: this.widget.widgetSize,
-            height: this.widget.widgetSize,
-            decoration: BoxDecoration(
-              color: this.widget.decoration?.backgroundColor ?? Colors.black26,
-              borderRadius: const BorderRadius.all(Radius.circular(6)),
+  ///Applies watermark (file name and file size) on widget if (widget.useWaterMark ?? true)
+  ///Positions of name and dataSize are fixed
+  Widget _applyMetadataWatermark(Widget thumbnail) {
+    if (widget.useWaterMark ?? true) {
+      return Center(
+        child: Stack(
+          children: <Widget>[
+            Container(
+              width: widget.widgetSize,
+              height: widget.widgetSize,
+              decoration: BoxDecoration(
+                color: widget.decoration?.backgroundColor ?? Colors.transparent,
+                borderRadius: const BorderRadius.all(Radius.circular(6)),
+              ),
+              child: thumbnail,
             ),
-            child: widget,
-          ),
-          if (this.widget.name != null)
-            Positioned(
-              bottom: 5,
-              left: 0,
-              right: 0,
-              child: Container(
-                width: this.widget.widgetSize,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 5, right: 5),
-                  child: Center(
-                    child: Text(
-                      '${this.widget.name}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: this.widget.decoration?.textColor ?? Colors.black,
+            if (widget.name != null)
+              Positioned(
+                bottom: 5,
+                left: 0,
+                right: 0,
+                child: Container(
+                  width: widget.widgetSize,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 5, right: 5),
+                    child: Center(
+                      child: Text(
+                        '${widget.name}',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: widget.decoration?.textColor ?? Colors.black,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          if (this.widget.dataSize != null)
-            Positioned(
-              top: 5,
-              left: 5,
-              child: Text(
-                '${(this.widget.dataSize / 1024).floor()} kB',
-                style: TextStyle(
-                  fontSize: 11,
-                  color: this.widget.decoration?.textColor ?? Colors.black,
+            if (widget.dataSize != null)
+              Positioned(
+                top: 5,
+                left: 5,
+                child: Text(
+                  '${(widget.dataSize / 1024).floor()} kB',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: widget.decoration?.textColor ?? Colors.black,
+                  ),
                 ),
               ),
-            ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    } else {
+      return thumbnail;
+    }
   }
 }
 

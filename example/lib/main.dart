@@ -45,16 +45,15 @@ class _MyAppState extends State<MyApp> {
                       crossAxisCount: 2,
                       children: <Widget>[
                         Column(
-                          children: <Widget>[
+                          children: const <Widget>[
                             Thumbnail(
-                              dataResolver: () async => null,
                               mimeType: 'text/html',
                               widgetSize: 100,
                             ),
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),
                               child: Text(
-                                'simplest Thumbnail , only set necessary params (mimeType,widgetSize and dataResolver as () async => null)',
+                                'simplest Thumbnail , only set necessary params (mimeType,widgetSize)',
                                 overflow: TextOverflow.clip,
                                 textAlign: TextAlign.center,
                               ),
@@ -64,7 +63,6 @@ class _MyAppState extends State<MyApp> {
                         Column(
                           children: <Widget>[
                             Thumbnail(
-                              dataResolver: () async => null,
                               mimeType: 'text/html',
                               widgetSize: 100,
                               decoration: WidgetDecoration(
@@ -85,7 +83,6 @@ class _MyAppState extends State<MyApp> {
                         Column(
                           children: <Widget>[
                             Thumbnail(
-                              dataResolver: () async => null,
                               mimeType: 'text/html',
                               dataSize: 125000,
                               name: 'file name',
@@ -108,7 +105,6 @@ class _MyAppState extends State<MyApp> {
                         Column(
                           children: <Widget>[
                             Thumbnail(
-                              dataResolver: () async => null,
                               mimeType:
                                   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                               dataSize: 125000,
@@ -123,7 +119,7 @@ class _MyAppState extends State<MyApp> {
                               padding: EdgeInsets.symmetric(horizontal: 7),
                               child: Center(
                                 child: Text(
-                                  'Icons are set thanks to mimeType param and map (in Thumbnails) which maps mimeType-IconData relation',
+                                  'Icons are set thanks to mimeType param and map (Thumbnailer._mimeTypeToIconDataMap) which maps mimeType to IconData',
                                   overflow: TextOverflow.clip,
                                   textAlign: TextAlign.center,
                                 ),
@@ -134,7 +130,6 @@ class _MyAppState extends State<MyApp> {
                         Column(
                           children: <Widget>[
                             Thumbnail(
-                              dataResolver: () async => null,
                               mimeType:
                                   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                               dataSize: 125000,
@@ -144,13 +139,13 @@ class _MyAppState extends State<MyApp> {
                                 backgroundColor: Colors.blueAccent,
                                 iconColor: Colors.red,
                                 textColor: Colors.red,
-                                wrapperSize: 110,
+                                wrapperBgColor: Colors.black,
                               ),
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),
                               child: Text(
-                                'Thumbnail with set text color and wrapper size',
+                                'Thumbnail with set text color and wrapper color',
                                 overflow: TextOverflow.clip,
                                 textAlign: TextAlign.center,
                               ),
@@ -160,49 +155,23 @@ class _MyAppState extends State<MyApp> {
                         Column(
                           children: <Widget>[
                             Thumbnail(
-                              dataResolver: () async => null,
                               mimeType:
                                   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                               dataSize: 125000,
                               name: 'file name',
                               widgetSize: 100,
                               decoration: WidgetDecoration(
-                                  backgroundColor: Colors.blueAccent,
-                                  iconColor: Colors.red,
-                                  textColor: Colors.red,
-                                  wrapperSize: 110,
-                                  wrapperBgColor: Colors.black),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 7),
-                              child: Text(
-                                'Thumbnail with wrapper color set',
-                                textAlign: TextAlign.center,
-                                overflow: TextOverflow.clip,
+                                backgroundColor: Colors.blueAccent,
+                                iconColor: Colors.red,
+                                textColor: Colors.red,
+                                wrapperSize: 120,
+                                wrapperBgColor: Colors.black,
                               ),
                             ),
-                          ],
-                        ),
-                        Column(
-                          children: <Widget>[
-                            Thumbnail(
-                              dataResolver: () async => null,
-                              mimeType:
-                                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                              dataSize: 125000,
-                              name: 'file name',
-                              widgetSize: 100,
-                              decoration: WidgetDecoration(
-                                  backgroundColor: Colors.blueAccent,
-                                  iconColor: Colors.red,
-                                  textColor: Colors.red,
-                                  wrapperSize: 110,
-                                  wrapperBgColor: Colors.transparent),
-                            ),
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),
                               child: Text(
-                                'Thumbnail with transparent wrapper',
+                                'Thumbnail with wrapper size set',
                                 textAlign: TextAlign.center,
                                 overflow: TextOverflow.clip,
                               ),
@@ -249,13 +218,14 @@ class _MyAppState extends State<MyApp> {
                                     .asUint8List();
                               },
                               mimeType: 'image/png',
-                              decoration: WidgetDecoration(wrapperBgColor: Colors.transparent),
                               widgetSize: 100,
+                              dataSize: 12345,
+                              name: 'png',
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),
                               child: Text(
-                                'png image with transparent wrapper',
+                                'png image with data size and name set',
                                 overflow: TextOverflow.clip,
                                 textAlign: TextAlign.center,
                               ),
@@ -272,7 +242,6 @@ class _MyAppState extends State<MyApp> {
                                     .asUint8List();
                               },
                               mimeType: 'image/jpg',
-                              decoration: WidgetDecoration(wrapperBgColor: Colors.transparent),
                               widgetSize: 100,
                             ),
                             const Padding(
@@ -349,9 +318,8 @@ class _MyAppState extends State<MyApp> {
                               },
                               mimeType: 'image/png',
                               onlyIcon: true,
-                              decoration: WidgetDecoration(
-                                wrapperBgColor: Colors.transparent,
-                              ),
+                              dataSize: 12345,
+                              name: 'png',
                               widgetSize: 100,
                             ),
                             const Padding(
@@ -383,7 +351,6 @@ class _MyAppState extends State<MyApp> {
                               },
                               mimeType: 'image/png',
                               widgetSize: 300,
-                              decoration: WidgetDecoration(wrapperBgColor: Colors.transparent),
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),
