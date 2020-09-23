@@ -1,5 +1,5 @@
 # thumbnailer
-[![pub package](https://img.shields.io/pub/v/signature.svg)](https://pub.dartlang.org/packages/thumbnailer)
+[![pub package](https://img.shields.io/pub/v/thumbnailer.svg)](https://pub.dartlang.org/packages/thumbnailer)
 
 A Flutter plugin that is able to generate thumbnails for images, pdf and xlsx files
 * if thumbnail generation is not supported for specific mime type, then a fallback icon from FontAwesome is returned
