@@ -11,8 +11,7 @@ import 'package:spreadsheet_decoder/spreadsheet_decoder.dart';
 /// Main class for thumbnailer plugin
 class Thumbnailer {
   ///Map which contains mimeType-IconData relation
-  static final Map<String, IconData> _mimeTypeToIconDataMap =
-      <String, IconData>{
+  static final Map<String, IconData> _mimeTypeToIconDataMap = <String, IconData>{
     'image': FontAwesomeIcons.image,
     'application/pdf': FontAwesomeIcons.filePdf,
     'application/msword': FontAwesomeIcons.fileWord,
@@ -20,15 +19,12 @@ class Thumbnailer {
         FontAwesomeIcons.fileWord,
     'application/vnd.oasis.opendocument.text': FontAwesomeIcons.fileWord,
     'application/vnd.ms-excel': FontAwesomeIcons.fileExcel,
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-        FontAwesomeIcons.fileExcel,
-    'application/vnd.oasis.opendocument.spreadsheet':
-        FontAwesomeIcons.fileExcel,
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': FontAwesomeIcons.fileExcel,
+    'application/vnd.oasis.opendocument.spreadsheet': FontAwesomeIcons.fileExcel,
     'application/vnd.ms-powerpoint': FontAwesomeIcons.filePowerpoint,
     'application/vnd.openxmlformats-officedocument.presentationml.presentation':
         FontAwesomeIcons.filePowerpoint,
-    'application/vnd.oasis.opendocument.presentation':
-        FontAwesomeIcons.filePowerpoint,
+    'application/vnd.oasis.opendocument.presentation': FontAwesomeIcons.filePowerpoint,
     'text/plain': FontAwesomeIcons.fileAlt,
     'text/csv': FontAwesomeIcons.fileCsv,
     'application/x-archive': FontAwesomeIcons.fileArchive,
@@ -103,6 +99,7 @@ class Thumbnailer {
     'application/x-sh': FontAwesomeIcons.code,
     'text/x-script.sh': FontAwesomeIcons.code,
     'text/x-script.zsh': FontAwesomeIcons.code,
+    'default': FontAwesomeIcons.file,
   };
 
   ///Map which contains strategy of creating thumbnail widget
@@ -142,8 +139,7 @@ class Thumbnailer {
       if (resolvedData != null) {
         final PdfDocument document = await PdfDocument.openData(resolvedData);
         final PdfPage page = await document.getPage(1);
-        final PdfPageImage pageImage =
-            await page.render(width: page.width, height: page.height);
+        final PdfPageImage pageImage = await page.render(width: page.width, height: page.height);
         return Center(
           child: Image.memory(
             pageImage.bytes,
@@ -164,8 +160,7 @@ class Thumbnailer {
       double widgetSize,
       WidgetDecoration decoration,
     ) =>
-        _xlsxAndOdsCreationStrategy(
-            name, getData, mimeType, dataSize, widgetSize, decoration),
+        _xlsxAndOdsCreationStrategy(name, getData, mimeType, dataSize, widgetSize, decoration),
     'application/vnd.oasis.opendocument.spreadsheet': (
       String name,
       String mimeType,
@@ -174,8 +169,7 @@ class Thumbnailer {
       double widgetSize,
       WidgetDecoration decoration,
     ) =>
-        _xlsxAndOdsCreationStrategy(
-            name, getData, mimeType, dataSize, widgetSize, decoration),
+        _xlsxAndOdsCreationStrategy(name, getData, mimeType, dataSize, widgetSize, decoration),
   };
 
   /// spreadsheet_decoder supports these 2 mime types
@@ -189,19 +183,15 @@ class Thumbnailer {
   ) async {
     final Uint8List resolvedData = await dataResolver();
     if (resolvedData != null) {
-      final SpreadsheetDecoder decoder =
-          SpreadsheetDecoder.decodeBytes(resolvedData.toList());
+      final SpreadsheetDecoder decoder = SpreadsheetDecoder.decodeBytes(resolvedData.toList());
       final List<List<dynamic>> rowsS = decoder.tables.entries.first.value.rows;
-      final int columnsCount =
-          rowsS.length > widgetSize ~/ 17 ? widgetSize ~/ 17 : rowsS.length;
-      final int rowsCount = rowsS.first.length > widgetSize ~/ 30
-          ? widgetSize ~/ 30
-          : rowsS.first.length;
+      final int columnsCount = rowsS.length > widgetSize ~/ 17 ? widgetSize ~/ 17 : rowsS.length;
+      final int rowsCount =
+          rowsS.first.length > widgetSize ~/ 30 ? widgetSize ~/ 30 : rowsS.first.length;
       final List<Row> rows = <Row>[];
       final double rowWidth = widgetSize / (rowsCount + 1);
       final double rowHeight = widgetSize / columnsCount;
-      final double fontSize =
-          rowWidth > rowHeight ? rowHeight / 3 : rowWidth / 6;
+      final double fontSize = rowWidth > rowHeight ? rowHeight / 3 : rowWidth / 6;
 
       for (int i = 0; i < columnsCount; i++) {
         final List<Widget> rowWidgets = <Widget>[];
@@ -210,17 +200,19 @@ class Thumbnailer {
             if (j == 0) {
               //view selector
               rowWidgets.add(_createCell(
-                  text: ' ',
-                  rowHeight: rowHeight,
-                  rowWidth: rowWidth,
-                  fontSize: fontSize,
-                  border: Border.fromBorderSide(
-                    BorderSide(width: widgetSize / 300),
-                  )));
+                text: ' ',
+                rowHeight: rowHeight,
+                rowWidth: rowWidth,
+                fontSize: fontSize,
+                border: Border.fromBorderSide(
+                  BorderSide(width: widgetSize / 300),
+                ),
+                textColor: decoration.textColor,
+              ));
             }
             //column headers
             rowWidgets.add(_createCell(
-              text: '${rowsS.elementAt(i).elementAt(j) ?? ''}',
+              text: String.fromCharCode(j + 65) ?? '',
               rowHeight: rowHeight,
               rowWidth: rowWidth,
               fontSize: fontSize,
@@ -229,6 +221,7 @@ class Thumbnailer {
                 bottom: BorderSide(width: widgetSize / 300),
                 top: BorderSide(width: widgetSize / 300),
               ),
+              textColor: decoration.textColor,
             ));
           } else {
             if (j == 0) {
@@ -243,6 +236,7 @@ class Thumbnailer {
                   bottom: BorderSide(width: widgetSize / 300),
                   left: BorderSide(width: widgetSize / 300),
                 ),
+                textColor: decoration.textColor,
               ));
             }
             rowWidgets.add(
@@ -259,18 +253,18 @@ class Thumbnailer {
                 height: rowHeight,
                 child: Center(
                   child: LayoutBuilder(
-                    builder:
-                        (BuildContext context, BoxConstraints constraints) {
+                    builder: (BuildContext context, BoxConstraints constraints) {
                       return Padding(
-                        padding: EdgeInsets.only(
-                            left: rowWidth / 50, right: rowWidth / 50),
+                        padding: EdgeInsets.only(left: rowWidth / 50, right: rowWidth / 50),
                         child: Text(
                           '${rowsS.elementAt(i).elementAt(j) ?? ' '}',
                           overflow: TextOverflow.ellipsis,
                           maxLines: (constraints.maxHeight / fontSize).floor(),
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              fontSize: fontSize, fontWeight: FontWeight.w900),
+                              fontSize: fontSize,
+                              fontWeight: FontWeight.w900,
+                              color: decoration.textColor),
                         ),
                       );
                     },
@@ -295,13 +289,13 @@ class Thumbnailer {
 
   ///Internal helper function which creates decorated table cell
   ///used for row headers, column headers and view selector in [_xlsxAndOdsCreationStrategy]
-  static Widget _createCell({
-    @required String text,
-    @required double rowHeight,
-    @required double rowWidth,
-    @required double fontSize,
-    @required Border border,
-  }) {
+  static Widget _createCell(
+      {@required String text,
+      @required double rowHeight,
+      @required double rowWidth,
+      @required double fontSize,
+      @required Border border,
+      @required Color textColor}) {
     return Container(
       decoration: BoxDecoration(
         color: const Color.fromRGBO(220, 220, 220, 0.9),
@@ -312,21 +306,19 @@ class Thumbnailer {
       child: Center(
         child: Text(
           text,
-          style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w900),
+          style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w900, color: textColor),
         ),
       ),
     );
   }
 
   ///Adds custom mappings to [_mimeTypeToIconDataMap]
-  static void addCustomMimeTypesToIconDataMappings(
-      Map<String, IconData> mappings) {
+  static void addCustomMimeTypesToIconDataMappings(Map<String, IconData> mappings) {
     _mimeTypeToIconDataMap.addAll(mappings);
   }
 
   ///Adds custom strategies to [_generationStrategies]
-  static void addCustomGenerationStrategies(
-      Map<String, GenerationStrategyFunction> strategies) {
+  static void addCustomGenerationStrategies(Map<String, GenerationStrategyFunction> strategies) {
     _generationStrategies.addAll(strategies);
   }
 
@@ -393,8 +385,7 @@ class ThumbnailState extends State<Thumbnail> {
   @override
   void initState() {
     super.initState();
-    final GenerationStrategyFunction generationStrategyFunction =
-        _getIconByMimeType(
+    final GenerationStrategyFunction generationStrategyFunction = _getIconByMimeType(
       Thumbnailer._generationStrategies,
       widget.mimeType,
       '/',
@@ -421,15 +412,14 @@ class ThumbnailState extends State<Thumbnail> {
             throw snapshot.error;
           }
           if (snapshot.connectionState == ConnectionState.done) {
-            return _wrapThumbnail(
-                _applyMetadataWatermark(snapshot.data ?? _createIcon()));
+            return _wrapThumbnail(_applyMetadataWatermark(snapshot.data ?? _createIcon()));
           } else {
             return Container(
               child: const Center(child: CircularProgressIndicator()),
               width: widget.widgetSize,
               height: widget.widgetSize,
-              decoration: BoxDecoration(
-                  color: widget.decoration?.backgroundColor ?? Colors.black45),
+              decoration:
+                  BoxDecoration(color: widget.decoration?.backgroundColor ?? Colors.black45),
             );
           }
         },
@@ -455,8 +445,7 @@ class ThumbnailState extends State<Thumbnail> {
       );
     } else {
       throw FileThumbnailsException(
-        message:
-            "Couldn't create thumbnail, unknown mime type: ${widget.mimeType}."
+        message: "Couldn't create thumbnail, unknown mime type: ${widget.mimeType}."
             " Didn't you forget to register custom mimetype/icon mapping?",
       );
     }
@@ -465,20 +454,18 @@ class ThumbnailState extends State<Thumbnail> {
   ///Internal helper function which extracts [T] value from [mapToExtractFrom].
   ///Function is cutting from end of [mimeType] until [mimeType] contains [divider] or map keys
   ///contains cut string
-  static T _getIconByMimeType<T>(
-      Map<String, T> mapToExtractFrom, String mimeType, String divider) {
+  static T _getIconByMimeType<T>(Map<String, T> mapToExtractFrom, String mimeType, String divider) {
     if (mapToExtractFrom.containsKey(mimeType)) {
       return mapToExtractFrom[mimeType];
     }
     String mimeTypePart = mimeType;
     while (mimeTypePart.contains(divider)) {
-      mimeTypePart =
-          mimeTypePart.substring(0, mimeTypePart.lastIndexOf(divider));
+      mimeTypePart = mimeTypePart.substring(0, mimeTypePart.lastIndexOf(divider));
       if (mapToExtractFrom.containsKey(mimeTypePart)) {
         return mapToExtractFrom[mimeTypePart];
       }
     }
-    return null;
+    return mapToExtractFrom['default'];
   }
 
   ///Wraps thumbnail if (widget.useWrapper ?? true)
@@ -487,8 +474,7 @@ class ThumbnailState extends State<Thumbnail> {
       return Container(
         width: widget.decoration?.wrapperSize ?? widget.widgetSize,
         height: widget.decoration?.wrapperSize ?? widget.widgetSize,
-        decoration: BoxDecoration(
-            color: widget.decoration?.wrapperBgColor ?? Colors.transparent),
+        decoration: BoxDecoration(color: widget.decoration?.wrapperBgColor ?? Colors.transparent),
         child: thumbnail,
       );
     } else {
