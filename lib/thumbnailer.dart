@@ -334,18 +334,19 @@ class Thumbnailer {
 /// strategies in [Thumbnailer._generationStrategies] has to be aware of null value
 class Thumbnail extends StatefulWidget {
   ///constructor
-  const Thumbnail({
-    @required this.mimeType,
-    @required this.widgetSize,
-    this.dataResolver,
-    Key key,
-    this.dataSize,
-    this.name,
-    this.decoration,
-    this.onlyIcon,
-    this.useWaterMark,
-    this.useWrapper,
-  }) : super(key: key);
+  const Thumbnail(
+      {@required this.mimeType,
+      @required this.widgetSize,
+      this.dataResolver,
+      Key key,
+      this.dataSize,
+      this.name,
+      this.decoration,
+      this.onlyIcon,
+      this.useWaterMark,
+      this.useWrapper,
+      this.onlyName})
+      : super(key: key);
 
   /// If non-null, the style to use for this thumbnail.
   final WidgetDecoration decoration;
@@ -373,6 +374,9 @@ class Thumbnail extends StatefulWidget {
 
   /// Should be thumbnail wrapped
   final bool useWrapper;
+
+  /// Show only name for watermark thumbnail
+  final bool onlyName;
 
   @override
   ThumbnailState createState() => ThumbnailState();
@@ -409,10 +413,12 @@ class ThumbnailState extends State<Thumbnail> {
         future: _thumbnailFuture,
         builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
           if (snapshot.hasError) {
+            // ignore: only_throw_errors
             throw snapshot.error;
           }
           if (snapshot.connectionState == ConnectionState.done) {
-            return _wrapThumbnail(_applyMetadataWatermark(snapshot.data ?? _createIcon()));
+            return _wrapThumbnail(_applyMetadataWatermark(
+                widget?.onlyName ?? false ? snapshot?.data : snapshot?.data ?? _createIcon()));
           } else {
             return Container(
               child: const Center(child: CircularProgressIndicator()),
@@ -425,7 +431,8 @@ class ThumbnailState extends State<Thumbnail> {
         },
       );
     } else {
-      return _wrapThumbnail(_applyMetadataWatermark(_createIcon()));
+      return _wrapThumbnail(
+          _applyMetadataWatermark(widget?.onlyName ?? false ? null : _createIcon()));
     }
   }
 
@@ -483,8 +490,11 @@ class ThumbnailState extends State<Thumbnail> {
   }
 
   ///Applies watermark (file name and file size) on widget if (widget.useWaterMark ?? true)
+  ///Applies watermark (file name) on widget if (widget.onlyName ?? true)
   ///Positions of name and dataSize are fixed
   Widget _applyMetadataWatermark(Widget thumbnail) {
+    final double heightWidget = widget.widgetSize * (widget?.onlyName ?? false ? 1 : 0.35);
+    final int numberOfLinesInNameWidget = (heightWidget - 5) ~/ 11;
     if (widget.useWaterMark ?? true) {
       return Center(
         child: Stack(
@@ -498,39 +508,66 @@ class ThumbnailState extends State<Thumbnail> {
               ),
               child: thumbnail,
             ),
-            if (widget.name != null)
-              Positioned(
-                bottom: 5,
-                left: 0,
-                right: 0,
-                child: Container(
-                  width: widget.widgetSize,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 5, right: 5),
-                    child: Center(
-                      child: Text(
-                        '${widget.name}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: widget.decoration?.textColor ?? Colors.black,
+            Column(
+              children: <Widget>[
+                if (widget.dataSize != null && !(widget?.onlyName ?? false))
+                  Container(
+                    height: heightWidget,
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.only(left: 5.0, top: 5.0),
+                              child: Text(
+                                '${(widget.dataSize / 1024).floor()} kB',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: widget.decoration?.textColor ?? Colors.black,
+                                ),
+                              ),
+                            ),
+                            Container(),
+                          ],
                         ),
-                      ),
+                      ],
                     ),
                   ),
-                ),
-              ),
-            if (widget.dataSize != null)
-              Positioned(
-                top: 5,
-                left: 5,
-                child: Text(
-                  '${(widget.dataSize / 1024).floor()} kB',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: widget.decoration?.textColor ?? Colors.black,
+                if (!(widget?.onlyName ?? false))
+                  Container(
+                    height: 0.3 * widget.widgetSize,
                   ),
-                ),
-              ),
+                if (widget.name != null)
+                  Container(
+                    height: heightWidget,
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 5.0, right: 5, top: 2, bottom: 3),
+                      height: (numberOfLinesInNameWidget * 11.0) + 5,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Text(
+                            '${widget.name}',
+                            maxLines: numberOfLinesInNameWidget,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                            textScaleFactor: 1.0,
+                            style: TextStyle(
+                              color: widget.decoration?.textColor ?? Colors.black,
+                              fontSize: 11,
+                              height: 1,
+                              fontStyle: FontStyle.normal,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+              ],
+            ),
           ],
         ),
       );
