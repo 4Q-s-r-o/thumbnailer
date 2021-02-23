@@ -119,7 +119,7 @@ class _MyAppState extends State<MyApp> {
                               padding: EdgeInsets.symmetric(horizontal: 7),
                               child: Center(
                                 child: Text(
-                                  'Icons are set thanks to mimeType param and map (Thumbnailer._mimeTypeToIconDataMap) which maps mimeType to IconData',
+                                  'Icons are set thanks to mimeType param and map Thumbnailer._mimeTypeToIconDataMap',
                                   overflow: TextOverflow.clip,
                                   textAlign: TextAlign.center,
                                 ),
@@ -148,6 +148,32 @@ class _MyAppState extends State<MyApp> {
                                 'Thumbnail with set text color and wrapper color',
                                 overflow: TextOverflow.clip,
                                 textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Thumbnail(
+                              mimeType:
+                                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                              dataSize: 125000,
+                              name: 'file name',
+                              widgetSize: 100,
+                              onlyName: true,
+                              decoration: WidgetDecoration(
+                                backgroundColor: Colors.blueAccent,
+                                iconColor: Colors.red,
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 7),
+                              child: Center(
+                                child: Text(
+                                  'parameter onlyName set to true to allow gracefull degradation',
+                                  overflow: TextOverflow.clip,
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ),
                           ],
