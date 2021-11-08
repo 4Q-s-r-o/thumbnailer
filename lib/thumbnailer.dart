@@ -144,6 +144,11 @@ class Thumbnailer {
         width: page.width,
         height: page.height,
       ))!;
+      // ignore: unawaited_futures
+      Future.wait<void>(<Future<void>>[
+        page.close(),
+        document.close(),
+      ]);
       return Center(
         child: Image.memory(
           pageImage.bytes,
