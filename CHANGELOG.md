@@ -1,3 +1,6 @@
+## 2.0.1
+* PDF thumbnail optimalization (SergeShkurko)
+
 ## 2.0.0
 * null safety migration (Dodik1310)
 
