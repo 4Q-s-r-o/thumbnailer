@@ -1,3 +1,10 @@
+## 2.0.2
+* upgraded dependencies
+* upgraded gradle version
+* upgraded kotlin version
+* android 12 compliant
+* some cleanup
+
 ## 2.0.1
 * PDF thumbnail optimalization (SergeShkurko)
 
