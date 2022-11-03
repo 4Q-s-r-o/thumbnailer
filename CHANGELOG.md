@@ -1,3 +1,6 @@
+## 2.1.0
+* upgraded dependencies (IlyaZadyabin)
+
 ## 2.0.2
 * upgraded dependencies
 * upgraded gradle version
