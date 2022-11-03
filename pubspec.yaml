@@ -12,9 +12,9 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  font_awesome_flutter: ^10.1.0
-  native_pdf_renderer: ^5.0.0+1
-  spreadsheet_decoder: ^2.1.0
+  font_awesome_flutter: ^10.2.1
+  pdfx: ^2.3.0
+  spreadsheet_decoder: ^2.1.1
 
 dev_dependencies:
   flutter_test:
