@@ -1,3 +1,6 @@
+## 2.2.0
+* Added optional error builder for customization of widget if data cannot be loaded (telmedola)
+
 ## 2.1.0
 * upgraded dependencies (IlyaZadyabin)
 

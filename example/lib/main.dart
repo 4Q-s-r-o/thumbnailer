@@ -82,6 +82,32 @@ class _MyAppState extends State<MyApp> {
                         ),
                         Column(
                           children: <Widget>[
+                            Container(
+                              clipBehavior: Clip.hardEdge,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle
+                              ),
+                              child: Thumbnail(
+                                mimeType: 'text/html',
+                                widgetSize: 100,
+                                decoration: WidgetDecoration(
+                                  backgroundColor: Colors.blueAccent,
+                                  iconColor: Colors.red,
+                                ),
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 7),
+                              child: Text(
+                                'Rounded style parent',
+                                overflow: TextOverflow.clip,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: <Widget>[
                             Thumbnail(
                               mimeType: 'text/html',
                               dataSize: 125000,
