@@ -84,9 +84,8 @@ class _MyAppState extends State<MyApp> {
                           children: <Widget>[
                             Container(
                               clipBehavior: Clip.hardEdge,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle
-                              ),
+                              decoration:
+                                  const BoxDecoration(shape: BoxShape.circle),
                               child: Thumbnail(
                                 mimeType: 'text/html',
                                 widgetSize: 100,
@@ -458,6 +457,37 @@ class _MyAppState extends State<MyApp> {
                               padding: EdgeInsets.symmetric(horizontal: 7),
                               child: Text(
                                 '3rd is for xlsx and odt files',
+                                overflow: TextOverflow.clip,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Thumbnail(
+                              errorBuilder: (uildContext, Exception error) {
+                                return Container(
+                                  height: 200,
+                                  color: Colors.blue,
+                                  child: const Center(
+                                    child: Text('Cannot load file contents'),
+                                  ),
+                                );
+                              },
+                              dataResolver: () async {
+                                throw Error();
+                              },
+                              mimeType:
+                                  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                              widgetSize: 300,
+                              decoration: WidgetDecoration(
+                                  wrapperBgColor: Colors.blueAccent),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 7),
+                              child: Text(
+                                'On top of that, you can also define custom error behaviour',
                                 overflow: TextOverflow.clip,
                                 textAlign: TextAlign.center,
                               ),
