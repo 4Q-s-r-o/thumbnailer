@@ -1,3 +1,6 @@
+### 3.0.0
+* Upgraded flutter to 3.29 and dependencies
+
 ## 2.2.0
 * Added optional error builder for customization of widget if data cannot be loaded (telmedola)
 
