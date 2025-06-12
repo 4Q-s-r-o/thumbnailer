@@ -1,3 +1,5 @@
+### 3.1.0
+* Upgraded flutter to 3.32 and dumped dependencies
 ### 3.0.0
 * Upgraded flutter to 3.29 and dependencies
 
