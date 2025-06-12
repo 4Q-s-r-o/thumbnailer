@@ -1,6 +1,6 @@
-import 'package:thumbnailer/thumbnailer.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:thumbnailer/thumbnailer.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,9 +16,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    Thumbnailer.addCustomMimeTypesToIconDataMappings(<String, IconData>{
-      'custom/mimeType': FontAwesomeIcons.key,
-    });
+    Thumbnailer.addCustomMimeTypesToIconDataMappings(<String, IconData>{'custom/mimeType': FontAwesomeIcons.key});
   }
 
   final List<Tab> myTabs = <Tab>[
@@ -44,12 +42,9 @@ class _MyAppState extends State<MyApp> {
                     child: GridView.count(
                       crossAxisCount: 2,
                       children: <Widget>[
-                        Column(
-                          children: const <Widget>[
-                            Thumbnail(
-                              mimeType: 'text/html',
-                              widgetSize: 100,
-                            ),
+                        const Column(
+                          children: <Widget>[
+                            Thumbnail(mimeType: 'text/html', widgetSize: 100),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),
                               child: Text(
@@ -65,10 +60,7 @@ class _MyAppState extends State<MyApp> {
                             Thumbnail(
                               mimeType: 'text/html',
                               widgetSize: 100,
-                              decoration: WidgetDecoration(
-                                backgroundColor: Colors.blueAccent,
-                                iconColor: Colors.red,
-                              ),
+                              decoration: WidgetDecoration(backgroundColor: Colors.blueAccent, iconColor: Colors.red),
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),
@@ -84,15 +76,11 @@ class _MyAppState extends State<MyApp> {
                           children: <Widget>[
                             Container(
                               clipBehavior: Clip.hardEdge,
-                              decoration:
-                                  const BoxDecoration(shape: BoxShape.circle),
+                              decoration: const BoxDecoration(shape: BoxShape.circle),
                               child: Thumbnail(
                                 mimeType: 'text/html',
                                 widgetSize: 100,
-                                decoration: WidgetDecoration(
-                                  backgroundColor: Colors.blueAccent,
-                                  iconColor: Colors.red,
-                                ),
+                                decoration: WidgetDecoration(backgroundColor: Colors.blueAccent, iconColor: Colors.red),
                               ),
                             ),
                             const Padding(
@@ -112,10 +100,7 @@ class _MyAppState extends State<MyApp> {
                               dataSize: 125000,
                               name: 'file name',
                               widgetSize: 100,
-                              decoration: WidgetDecoration(
-                                backgroundColor: Colors.blueAccent,
-                                iconColor: Colors.red,
-                              ),
+                              decoration: WidgetDecoration(backgroundColor: Colors.blueAccent, iconColor: Colors.red),
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),
@@ -130,15 +115,11 @@ class _MyAppState extends State<MyApp> {
                         Column(
                           children: <Widget>[
                             Thumbnail(
-                              mimeType:
-                                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                              mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                               dataSize: 125000,
                               name: 'file name',
                               widgetSize: 100,
-                              decoration: WidgetDecoration(
-                                backgroundColor: Colors.blueAccent,
-                                iconColor: Colors.red,
-                              ),
+                              decoration: WidgetDecoration(backgroundColor: Colors.blueAccent, iconColor: Colors.red),
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),
@@ -155,8 +136,7 @@ class _MyAppState extends State<MyApp> {
                         Column(
                           children: <Widget>[
                             Thumbnail(
-                              mimeType:
-                                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                              mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                               dataSize: 125000,
                               name: 'file name',
                               widgetSize: 100,
@@ -180,16 +160,12 @@ class _MyAppState extends State<MyApp> {
                         Column(
                           children: <Widget>[
                             Thumbnail(
-                              mimeType:
-                                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                              mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                               dataSize: 125000,
                               name: 'file name',
                               widgetSize: 100,
                               onlyName: true,
-                              decoration: WidgetDecoration(
-                                backgroundColor: Colors.blueAccent,
-                                iconColor: Colors.red,
-                              ),
+                              decoration: WidgetDecoration(backgroundColor: Colors.blueAccent, iconColor: Colors.red),
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),
@@ -206,8 +182,7 @@ class _MyAppState extends State<MyApp> {
                         Column(
                           children: <Widget>[
                             Thumbnail(
-                              mimeType:
-                                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                              mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                               dataSize: 125000,
                               name: 'file name',
                               widgetSize: 100,
@@ -241,21 +216,16 @@ class _MyAppState extends State<MyApp> {
                           children: <Widget>[
                             Thumbnail(
                               dataResolver: () async {
-                                return (await DefaultAssetBundle.of(context)
-                                        .load('assets/samples/png-sample.png'))
-                                    .buffer
-                                    .asUint8List();
+                                return (await DefaultAssetBundle.of(
+                                  context,
+                                ).load('assets/samples/png-sample.png')).buffer.asUint8List();
                               },
                               mimeType: 'image/png',
                               widgetSize: 100,
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),
-                              child: Text(
-                                'png image',
-                                overflow: TextOverflow.clip,
-                                textAlign: TextAlign.center,
-                              ),
+                              child: Text('png image', overflow: TextOverflow.clip, textAlign: TextAlign.center),
                             ),
                           ],
                         ),
@@ -263,10 +233,9 @@ class _MyAppState extends State<MyApp> {
                           children: <Widget>[
                             Thumbnail(
                               dataResolver: () async {
-                                return (await DefaultAssetBundle.of(context)
-                                        .load('assets/samples/png-sample.png'))
-                                    .buffer
-                                    .asUint8List();
+                                return (await DefaultAssetBundle.of(
+                                  context,
+                                ).load('assets/samples/png-sample.png')).buffer.asUint8List();
                               },
                               mimeType: 'image/png',
                               widgetSize: 100,
@@ -287,21 +256,16 @@ class _MyAppState extends State<MyApp> {
                           children: <Widget>[
                             Thumbnail(
                               dataResolver: () async {
-                                return (await DefaultAssetBundle.of(context)
-                                        .load('assets/samples/jpg-sample.jpg'))
-                                    .buffer
-                                    .asUint8List();
+                                return (await DefaultAssetBundle.of(
+                                  context,
+                                ).load('assets/samples/jpg-sample.jpg')).buffer.asUint8List();
                               },
                               mimeType: 'image/jpg',
                               widgetSize: 100,
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),
-                              child: Text(
-                                'jpg image',
-                                overflow: TextOverflow.clip,
-                                textAlign: TextAlign.center,
-                              ),
+                              child: Text('jpg image', overflow: TextOverflow.clip, textAlign: TextAlign.center),
                             ),
                           ],
                         ),
@@ -309,16 +273,12 @@ class _MyAppState extends State<MyApp> {
                           children: <Widget>[
                             Thumbnail(
                               dataResolver: () async {
-                                return (await DefaultAssetBundle.of(context)
-                                        .load('assets/samples/jpg-sample.jpg'))
-                                    .buffer
-                                    .asUint8List();
+                                return (await DefaultAssetBundle.of(
+                                  context,
+                                ).load('assets/samples/jpg-sample.jpg')).buffer.asUint8List();
                               },
                               mimeType: 'image/jpg',
-                              decoration: WidgetDecoration(
-                                wrapperBgColor: Colors.deepOrange,
-                                wrapperSize: 110,
-                              ),
+                              decoration: WidgetDecoration(wrapperBgColor: Colors.deepOrange, wrapperSize: 110),
                               widgetSize: 100,
                             ),
                             const Padding(
@@ -335,17 +295,13 @@ class _MyAppState extends State<MyApp> {
                           children: <Widget>[
                             Thumbnail(
                               dataResolver: () async {
-                                return (await DefaultAssetBundle.of(context)
-                                        .load('assets/samples/jpg-sample.jpg'))
-                                    .buffer
-                                    .asUint8List();
+                                return (await DefaultAssetBundle.of(
+                                  context,
+                                ).load('assets/samples/jpg-sample.jpg')).buffer.asUint8List();
                               },
                               mimeType: 'image/jpg',
                               onlyIcon: true,
-                              decoration: WidgetDecoration(
-                                wrapperBgColor: Colors.deepOrange,
-                                wrapperSize: 110,
-                              ),
+                              decoration: WidgetDecoration(wrapperBgColor: Colors.deepOrange, wrapperSize: 110),
                               widgetSize: 100,
                             ),
                             const Padding(
@@ -362,10 +318,9 @@ class _MyAppState extends State<MyApp> {
                           children: <Widget>[
                             Thumbnail(
                               dataResolver: () async {
-                                return (await DefaultAssetBundle.of(context)
-                                        .load('assets/samples/png-sample.png'))
-                                    .buffer
-                                    .asUint8List();
+                                return (await DefaultAssetBundle.of(
+                                  context,
+                                ).load('assets/samples/png-sample.png')).buffer.asUint8List();
                               },
                               mimeType: 'image/png',
                               onlyIcon: true,
@@ -395,10 +350,9 @@ class _MyAppState extends State<MyApp> {
                           children: <Widget>[
                             Thumbnail(
                               dataResolver: () async {
-                                return (await DefaultAssetBundle.of(context)
-                                        .load('assets/samples/png-sample.png'))
-                                    .buffer
-                                    .asUint8List();
+                                return (await DefaultAssetBundle.of(
+                                  context,
+                                ).load('assets/samples/png-sample.png')).buffer.asUint8List();
                               },
                               mimeType: 'image/png',
                               widgetSize: 300,
@@ -417,15 +371,13 @@ class _MyAppState extends State<MyApp> {
                           children: <Widget>[
                             Thumbnail(
                               dataResolver: () async {
-                                return (await DefaultAssetBundle.of(context)
-                                        .load('assets/samples/pdf-sample.pdf'))
-                                    .buffer
-                                    .asUint8List();
+                                return (await DefaultAssetBundle.of(
+                                  context,
+                                ).load('assets/samples/pdf-sample.pdf')).buffer.asUint8List();
                               },
                               mimeType: 'application/pdf',
                               widgetSize: 300,
-                              decoration: WidgetDecoration(
-                                  wrapperBgColor: Colors.blueAccent),
+                              decoration: WidgetDecoration(wrapperBgColor: Colors.blueAccent),
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),
@@ -441,17 +393,13 @@ class _MyAppState extends State<MyApp> {
                           children: <Widget>[
                             Thumbnail(
                               dataResolver: () async {
-                                return (await DefaultAssetBundle.of(context)
-                                        .load(
-                                            'assets/samples/xlsx-sample.xlsx'))
-                                    .buffer
-                                    .asUint8List();
+                                return (await DefaultAssetBundle.of(
+                                  context,
+                                ).load('assets/samples/xlsx-sample.xlsx')).buffer.asUint8List();
                               },
-                              mimeType:
-                                  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                              mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                               widgetSize: 300,
-                              decoration: WidgetDecoration(
-                                  wrapperBgColor: Colors.blueAccent),
+                              decoration: WidgetDecoration(wrapperBgColor: Colors.blueAccent),
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),
@@ -466,23 +414,19 @@ class _MyAppState extends State<MyApp> {
                         Column(
                           children: <Widget>[
                             Thumbnail(
-                              errorBuilder: (uildContext, Exception error) {
+                              errorBuilder: (BuildContext buildContext, Exception error) {
                                 return Container(
                                   height: 200,
                                   color: Colors.blue,
-                                  child: const Center(
-                                    child: Text('Cannot load file contents'),
-                                  ),
+                                  child: const Center(child: Text('Cannot load file contents')),
                                 );
                               },
                               dataResolver: () async {
                                 throw Error();
                               },
-                              mimeType:
-                                  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                              mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                               widgetSize: 300,
-                              decoration: WidgetDecoration(
-                                  wrapperBgColor: Colors.blueAccent),
+                              decoration: WidgetDecoration(wrapperBgColor: Colors.blueAccent),
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 7),

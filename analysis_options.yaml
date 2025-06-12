@@ -1,3 +1,5 @@
+formatter:
+  page_width: 120
 # MOZNOSTI ANALYZY KODU POVODNE ZOBRATE PRIAMO Z FLUTTER PROJEKTU NA GITHUBE
 analyzer:
   strong-mode:
@@ -91,7 +93,6 @@ linter:
     - only_throw_errors
     # POTREBUJEME OVERRIDOVAT FIELDY V DOMENOVYCH OBJEKTOCH. VDAKA TOMU VIEME MENIT CHOVANIE V ZI
     # - overridden_fields
-    - package_api_docs
     - package_names
     - package_prefixed_library_names
     - parameter_assignments
