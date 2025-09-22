@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pdfx/pdfx.dart';
-import 'package:spreadsheet_decoder/spreadsheet_decoder.dart';
+import 'package:table_parser/table_parser.dart';
 
 /// Main class for thumbnailer plugin
 class Thumbnailer {
@@ -174,7 +174,7 @@ class Thumbnailer {
   ) async {
     assert(decoration != null);
     final Uint8List resolvedData = await dataResolver();
-    final SpreadsheetDecoder decoder = SpreadsheetDecoder.decodeBytes(resolvedData.toList());
+    final TableParser decoder = TableParser.decodeBytes(resolvedData.toList());
     final List<List<dynamic>> rowsS = decoder.tables.entries.first.value.rows;
     final int columnsCount = rowsS.length > widgetSize ~/ 17 ? widgetSize ~/ 17 : rowsS.length;
     final int rowsCount = rowsS.first.length > widgetSize ~/ 30 ? widgetSize ~/ 30 : rowsS.first.length;

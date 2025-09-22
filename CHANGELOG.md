@@ -1,5 +1,9 @@
+### 3.2.0
+* Upgraded flutter to 3.35
+* Replaced `spreadsheet_decoder` dependency with `table_parser` dependency
+* Bumped all dependencies
 ### 3.1.0
-* Upgraded flutter to 3.32 and dumped dependencies
+* Upgraded flutter to 3.32 and bumped dependencies
 ### 3.0.0
 * Upgraded flutter to 3.29 and dependencies
 
