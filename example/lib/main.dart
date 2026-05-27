@@ -16,7 +16,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    Thumbnailer.addCustomMimeTypesToIconDataMappings(<String, IconData>{'custom/mimeType': FontAwesomeIcons.key});
+    Thumbnailer.addCustomMimeTypesToIconDataMappings(<String, IconData>{'custom/mimeType': FontAwesomeIcons.key.data});
   }
 
   final List<Tab> myTabs = <Tab>[
